@@ -7,6 +7,7 @@ namespace CsvImportSite.Configuration
 {
 	public class AutoMapperProfiles : Profile
 	{
+
 		public AutoMapperProfiles()
 		{
 			CreateMap<Employee, ChangePayrollNumberViewModel>();

@@ -11,15 +11,13 @@ namespace CsvImportSite.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly ILogger<HomeController> _logger;
 		private readonly IEmployeeRepository _employeeRepository;
 		private readonly ICsvParsingService _csvParser;
 		private readonly IMapper _mapper;
 
-		public HomeController(ILogger<HomeController> logger, IEmployeeRepository repository, ICsvParsingService csvParser, IMapper mapper)
+		public HomeController(IEmployeeRepository repository, ICsvParsingService csvParser, IMapper mapper)
 		{
 			_csvParser = csvParser;
-			_logger = logger;
 			_employeeRepository = repository;
 			_mapper = mapper;
 		}

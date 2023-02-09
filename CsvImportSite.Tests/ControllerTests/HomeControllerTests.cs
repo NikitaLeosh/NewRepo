@@ -17,7 +17,6 @@ namespace CsvImportSite.Tests.ControllerTests
 {
 	public class HomeControllerTests
 	{
-		private readonly ILogger<HomeController> _logger;
 		private readonly IEmployeeRepository _employeeRepository;
 		private readonly ICsvParsingService _csvParser;
 		private readonly IMapper _mapper;
@@ -25,7 +24,6 @@ namespace CsvImportSite.Tests.ControllerTests
 
 		public HomeControllerTests()
 		{
-			_logger = A.Fake<ILogger<HomeController>>();
 			_employeeRepository = A.Fake<IEmployeeRepository>();
 			_csvParser = A.Fake<ICsvParsingService>();
 			_tempData = A.Fake<TempDataDictionary>();
@@ -39,7 +37,7 @@ namespace CsvImportSite.Tests.ControllerTests
 			var indexViewModel = A.Fake<IndexViewModel>();
 			var employees = A.CollectionOfFake<Employee>(2);
 			A.CallTo(() => _employeeRepository.GetAllEmployeesAsync()).Returns(employees);
-			var controller = new HomeController(_logger, _employeeRepository, _csvParser, _mapper);
+			var controller = new HomeController(_employeeRepository, _csvParser, _mapper);
 			//Act
 			var result = await controller.Index();
 			//Assert
@@ -71,7 +69,7 @@ namespace CsvImportSite.Tests.ControllerTests
 			A.CallTo(() => _csvParser.ParseCsvFile(indexVMTakenRows.CsvFile)).Returns(employeesTaken);
 			A.CallTo(() => _employeeRepository.AddRangeAsync(employees)).Returns(true);
 			A.CallTo(() => _employeeRepository.AddRangeAsync(employeesTaken)).Throws(new DbUpdateException());
-			var controller = new HomeController(_logger, _employeeRepository, _csvParser, _mapper);
+			var controller = new HomeController(_employeeRepository, _csvParser, _mapper);
 			controller.TempData = _tempData;
 			//Act
 			var resultNormal = await controller.Index(indexVM);
@@ -95,7 +93,7 @@ namespace CsvImportSite.Tests.ControllerTests
 			Employee empNull = null;
 			A.CallTo(() => _employeeRepository.GetEmployeeByPayrollNumberAsyncNoTracking(idNormal)).Returns(employeeToEdit);
 			A.CallTo(() => _employeeRepository.GetEmployeeByPayrollNumberAsyncNoTracking(idEmpty)).Returns(empNull);
-			var controller = new HomeController(_logger, _employeeRepository, _csvParser, _mapper);
+			var controller = new HomeController(_employeeRepository, _csvParser, _mapper);
 			controller.TempData = _tempData;
 			//Act
 			var resultNormal = await controller.Edit(idNormal);
@@ -114,7 +112,7 @@ namespace CsvImportSite.Tests.ControllerTests
 			var employeeToEditError = A.Fake<Employee>();
 			A.CallTo(() => _employeeRepository.Update(employeeToEditOk)).Returns(true);
 			A.CallTo(() => _employeeRepository.Update(employeeToEditError)).Throws(new Exception("This is exception"));
-			var controller = new HomeController(_logger, _employeeRepository, _csvParser, _mapper);
+			var controller = new HomeController(_employeeRepository, _csvParser, _mapper);
 			controller.TempData = _tempData;
 			//Act
 			var resultNormal = controller.Edit(A.Dummy<string>(), employeeToEditOk);
@@ -140,7 +138,7 @@ namespace CsvImportSite.Tests.ControllerTests
 			VMTaken.NewPayroll_Number = "c";
 			A.CallTo(() => _employeeRepository.ExistsByPayrollNumberAsync(VMNormal.NewPayroll_Number)).Returns(false);
 			A.CallTo(() => _employeeRepository.ExistsByPayrollNumberAsync(VMTaken.NewPayroll_Number)).Returns(true);
-			var controller = new HomeController(_logger, _employeeRepository, _csvParser, _mapper);
+			var controller = new HomeController(_employeeRepository, _csvParser, _mapper);
 			controller.TempData = _tempData;
 			//Act
 			var resultNormal = await controller.ChangePayrollNumber(VMNormal);
@@ -163,7 +161,7 @@ namespace CsvImportSite.Tests.ControllerTests
 			var employeeOk = A.Fake<Employee>();
 			A.CallTo(() => _employeeRepository.GetEmployeeByPayrollNumberAsync(payrollNumberOk)).Returns(employeeOk);
 			A.CallTo(() => _employeeRepository.Delete(employeeOk)).Returns(true);
-			var controller = new HomeController(_logger, _employeeRepository, _csvParser, _mapper);
+			var controller = new HomeController(_employeeRepository, _csvParser, _mapper);
 			controller.TempData = _tempData;
 			//Act
 			var resultOk = (RedirectToActionResult)await controller.Delete(payrollNumberOk);

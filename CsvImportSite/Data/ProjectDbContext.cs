@@ -25,14 +25,6 @@ namespace CsvImportSite.Data
 				Console.WriteLine(ex.ToString());
 			}
 		}
-		//EF core can not add DateOnly fields to the SQL server database. That is why
-		//Converter is used to transfer valid data to the database
-		protected override void ConfigureConventions(ModelConfigurationBuilder builder)
-		{
-			builder.Properties<DateOnly>()
-				.HaveConversion<DateOnlyConverter>()
-				.HaveColumnType("date");
-		}
 		public DbSet<Employee> Employees { get; set; }
 	}
 }

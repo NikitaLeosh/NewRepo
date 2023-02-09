@@ -5,6 +5,7 @@ namespace CsvImportSite.Configuration
 {
 	public class CsvEmployeeMap : ClassMap<Employee>
 	{
+		//Configuring the map for csv helper
 		public CsvEmployeeMap()
 		{
 			Map(m => m.Payroll_Number).Name("Personnel_Records.Payroll_Number");
